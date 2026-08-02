@@ -45,6 +45,10 @@
 /*****************************************************************************
 * Global variable or extern global variabls/functions
 *****************************************************************************/
+#if IS_ENABLED(CONFIG_NOTHING_IS_FROGGER)
+extern char touch_version[32];
+#endif
+
 u8 fw_file[] = {
 0
 //#include FTS_UPGRADE_FW_FILE
@@ -2051,6 +2055,10 @@ static int fts_get_fw_file_via_request_firmware(struct fts_upgrade *upg)
     snprintf(fwname, FILE_NAME_LENGTH, "%s%s.bin", \
                  FTS_FW_NAME_PREX_WITH_REQUEST, \
                  upg->module_info->vendor_name);
+#if IS_ENABLED(CONFIG_NOTHING_IS_FROGGER)
+    snprintf(fts_data->vendor_name, FILE_NAME_LENGTH, "%s", upg->module_info->vendor_name);
+    FTS_DEBUG("vendor_name:%s", fts_data->vendor_name);
+#endif
 
     ret = request_firmware(&fw, fwname, upg->ts_data->dev);
     if (0 == ret) {
@@ -2166,6 +2174,9 @@ static void fts_fwupg_work(struct work_struct *work)
     int ret = 0;
     int irq_need_recovery = false;
     struct fts_upgrade *upg = fwupgrade;
+#if IS_ENABLED(CONFIG_NOTHING_IS_FROGGER)
+    u8 ver = 0;
+#endif
 
 #if !FTS_AUTO_UPGRADE_EN
     FTS_INFO("FTS_AUTO_UPGRADE_EN is disabled, not upgrade when power on");
@@ -2203,6 +2214,11 @@ static void fts_fwupg_work(struct work_struct *work)
     if (irq_need_recovery)
         fts_irq_enable();
     upg->ts_data->fw_loading = 0;
+#if IS_ENABLED(CONFIG_NOTHING_IS_FROGGER)
+    fts_fwupg_get_ver_in_tp(&ver);
+    snprintf(touch_version, sizeof(touch_version), "ft3683g-%s-0x%02x",
+             upg->ts_data->vendor_name, ver);
+#endif
 }
 
 int fts_fwupg_init(struct fts_ts_data *ts_data)

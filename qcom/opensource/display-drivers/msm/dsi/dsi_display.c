@@ -42,6 +42,10 @@
 
 extern unsigned long fp_status;
 
+#if IS_ENABLED(CONFIG_NOTHING_IS_FROGGER)
+extern char panel_name_find[128];
+#endif
+
 u8 dbgfs_tx_cmd_buf[SZ_4K];
 static char dsi_display_primary[MAX_CMDLINE_PARAM_LEN];
 static char dsi_display_secondary[MAX_CMDLINE_PARAM_LEN];
@@ -1272,6 +1276,9 @@ int dsi_display_cmd_receive(void *display, const char *cmd_buf,
 		return rc;
 	}
 
+#if IS_ENABLED(CONFIG_NOTHING_IS_FROGGER)
+	cmd.msg.flags |= MIPI_DSI_MSG_USE_LPM;
+#endif
 	cmd.msg.rx_buf = recv_buf;
 	cmd.msg.rx_len = recv_buf_len;
 	cmd.msg.flags |= MIPI_DSI_MSG_UNICAST_COMMAND;
@@ -6202,6 +6209,13 @@ int dsi_display_dev_probe(struct platform_device *pdev)
 	display->panel_node = panel_node;
 	display->pdev = pdev;
 	display->boot_disp = boot_disp;
+
+#if IS_ENABLED(CONFIG_NOTHING_IS_FROGGER)
+	if (!strcmp(boot_disp->name, "qcom,mdss_dsi_nt37706a_120hz_fhd_plus_dsc_vid_boe")
+		|| !strcmp(boot_disp->name, "qcom,mdss_dsi_nt37706a_120hz_fhd_plus_dsc_vid_vxn")) {
+		strcpy(panel_name_find, boot_disp->name);
+	}
+#endif
 
 	dsi_display_parse_cmdline_topology(display, index);
 

@@ -628,9 +628,19 @@ int fts_fod_readdata(struct fts_ts_data *ts_data)
 
 static int fts_fod_recovery(struct fts_ts_data *ts_data)
 {
+#if IS_ENABLED(CONFIG_NOTHING_IS_FROGGER)
+    FTS_FUNC_ENTER();
+    if ((ts_data->fod_mode == FTS_FOD_DISABLE) || (ts_data->fod_mode == 3)) {
+        fts_fod_set_reg(DISABLE);
+    } else {
+        fts_fod_set_reg(FTS_VAL_FOD_ENABLE);
+    }
+    FTS_FUNC_EXIT();
+#else
     if (ts_data->fod_mode) {
         fts_fod_set_reg(FTS_VAL_FOD_ENABLE);
     }
+#endif
     return 0;
 }
 

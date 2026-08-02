@@ -302,6 +302,9 @@ struct fts_ts_data {
     int bus_type;
     int bus_ver;
     char customer_info[FTS_MAX_CUSTOMER_INFO];
+#if IS_ENABLED(CONFIG_NOTHING_IS_FROGGER)
+    char vendor_name[FILE_NAME_LENGTH];
+#endif
     struct regulator *vci;
     struct regulator *vddio;
 #if FTS_PINCTRL_EN
