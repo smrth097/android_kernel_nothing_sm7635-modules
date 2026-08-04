@@ -3997,7 +3997,9 @@ struct dsi_panel *dsi_panel_get(struct device *parent,
 	}
 
 	if (!strcmp(panel->name, "rm69220 amoled vid mode dsi visionox panel with DSC")
-		|| !strcmp(panel->name, "rm69220 amoled vid mode dsi BOE panel with DSC")) {
+		|| !strcmp(panel->name, "rm69220 amoled vid mode dsi BOE panel with DSC")
+		|| !strcmp(panel->name, "nt37706a amoled vid mode dsi VXN panel with DSC")
+		|| !strcmp(panel->name, "nt37706a amoled vid mode dsi BOE panel with DSC")) {
 		nt_panel = panel;
 	}
 
