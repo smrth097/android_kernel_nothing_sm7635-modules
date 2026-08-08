@@ -12,6 +12,8 @@
 #include <cam_req_mgr_util.h>
 #include "cam_sensor_soc.h"
 #include "cam_soc_util.h"
+// xft add for nothing custom
+#include "cam_sensor_nothing.h"
 
 int32_t cam_sensor_get_sub_module_index(struct device_node *of_node,
 	struct cam_sensor_board_info *s_info)
@@ -288,6 +290,9 @@ static int32_t cam_sensor_driver_get_dt_data(struct cam_sensor_ctrl_t *s_ctrl)
 		s_ctrl->hw_no_ops = false;
 	else
 		s_ctrl->hw_no_ops = true;
+
+	// xft add for sois power
+	cam_nt_get_ois_power(s_ctrl);
 
 	return rc;
 
